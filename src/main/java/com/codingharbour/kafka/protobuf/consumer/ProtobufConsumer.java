@@ -1,5 +1,6 @@
 package com.codingharbour.kafka.protobuf.consumer;
 
+import com.codingharbour.kafka.protobuf.serializer.ProtobufDeserializer;
 import io.confluent.kafka.serializers.protobuf.KafkaProtobufDeserializer;
 import io.confluent.kafka.serializers.protobuf.KafkaProtobufDeserializerConfig;
 import org.apache.kafka.clients.consumer.ConsumerConfig;
@@ -13,7 +14,7 @@ import java.time.Duration;
 import java.util.Collections;
 import java.util.Properties;
 
-import static com.codingharbour.protobuf.SimpleMessageProtos.SimpleMessage;
+import static com.codingharbour.kafka.protobuf.model.SimpleMessageProtos.SimpleMessage;
 
 public class ProtobufConsumer {
 
@@ -30,10 +31,11 @@ public class ProtobufConsumer {
         properties.put(ConsumerConfig.ENABLE_AUTO_COMMIT_CONFIG, false);
 
         properties.put(ConsumerConfig.KEY_DESERIALIZER_CLASS_CONFIG, StringDeserializer.class);
-        properties.put(ConsumerConfig.VALUE_DESERIALIZER_CLASS_CONFIG, KafkaProtobufDeserializer.class);
-
-        properties.put(KafkaProtobufDeserializerConfig.SCHEMA_REGISTRY_URL_CONFIG, "http://localhost:8081");
-        properties.put(KafkaProtobufDeserializerConfig.SPECIFIC_PROTOBUF_VALUE_TYPE, SimpleMessage.class.getName());
+        properties.put(ConsumerConfig.VALUE_DESERIALIZER_CLASS_CONFIG, ProtobufDeserializer.class);
+        properties.put("specific.protobuf.value.type", "com.codingharbour.kafka.protobuf.model.SimpleMessageProtos$SimpleMessage");
+//
+//        properties.put(KafkaProtobufDeserializerConfig.SCHEMA_REGISTRY_URL_CONFIG, "http://localhost:8081");
+//        properties.put(KafkaProtobufDeserializerConfig.SPECIFIC_PROTOBUF_VALUE_TYPE, SimpleMessage.class.getName());
 
         KafkaConsumer<String, SimpleMessage> consumer = new KafkaConsumer<>(properties);
 

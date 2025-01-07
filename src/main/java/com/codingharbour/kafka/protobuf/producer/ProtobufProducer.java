@@ -1,6 +1,7 @@
 package com.codingharbour.kafka.protobuf.producer;
 
-import com.codingharbour.protobuf.SimpleMessageProtos.SimpleMessage;
+import com.codingharbour.kafka.protobuf.model.SimpleMessageProtos.SimpleMessage;
+import com.codingharbour.kafka.protobuf.serializer.ProtobufSerializer;
 import io.confluent.kafka.serializers.protobuf.KafkaProtobufSerializer;
 import io.confluent.kafka.serializers.protobuf.KafkaProtobufSerializerConfig;
 import org.apache.kafka.clients.producer.KafkaProducer;
@@ -24,15 +25,20 @@ public class ProtobufProducer {
         Properties properties = new Properties();
         properties.put(ProducerConfig.BOOTSTRAP_SERVERS_CONFIG, "localhost:9092");
         properties.put(ProducerConfig.KEY_SERIALIZER_CLASS_CONFIG, StringSerializer.class);
-        properties.put(ProducerConfig.VALUE_SERIALIZER_CLASS_CONFIG, KafkaProtobufSerializer.class);
-        properties.put(KafkaProtobufSerializerConfig.SCHEMA_REGISTRY_URL_CONFIG, "http://localhost:8081");
+        properties.put(ProducerConfig.VALUE_SERIALIZER_CLASS_CONFIG, ProtobufSerializer.class);
+//        properties.put(KafkaProtobufSerializerConfig.SCHEMA_REGISTRY_URL_CONFIG, "http://localhost:8081");
+
+        //disable schema registry
+//        properties.put("auto.register.schemas", "false");
+//        properties.put("use.latest.version", "false");
+//        properties.put("specific.protobuf.value.type", "com.example.protobuf.PersonOuterClass$Person");
 
         Producer<String, SimpleMessage> producer = new KafkaProducer<>(properties);
 
         //prepare the message
         SimpleMessage simpleMessage =
                 SimpleMessage.newBuilder()
-                        .setContent("Hello world")
+                        .setContent("Hello world 123")
                         .setDateTime(Instant.now().toString())
                         .build();
 

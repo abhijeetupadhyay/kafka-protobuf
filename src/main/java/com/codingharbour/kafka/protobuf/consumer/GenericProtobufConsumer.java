@@ -1,5 +1,6 @@
 package com.codingharbour.kafka.protobuf.consumer;
 
+import com.codingharbour.kafka.protobuf.serializer.ProtobufDeserializer;
 import com.google.protobuf.Descriptors.FieldDescriptor;
 import com.google.protobuf.DynamicMessage;
 import io.confluent.kafka.serializers.protobuf.KafkaProtobufDeserializer;
@@ -27,10 +28,11 @@ public class GenericProtobufConsumer {
         properties.put(ConsumerConfig.GROUP_ID_CONFIG, "generic-protobuf-consumer-group");
         properties.put(ConsumerConfig.AUTO_OFFSET_RESET_CONFIG, "earliest");
         properties.put(ConsumerConfig.ENABLE_AUTO_COMMIT_CONFIG, false);
+        properties.put("specific.protobuf.value.type", "com.codingharbour.kafka.protobuf.model.SimpleMessage");
 
         properties.put(ConsumerConfig.KEY_DESERIALIZER_CLASS_CONFIG, StringDeserializer.class);
-        properties.put(ConsumerConfig.VALUE_DESERIALIZER_CLASS_CONFIG, KafkaProtobufDeserializer.class);
-        properties.put(KafkaProtobufDeserializerConfig.SCHEMA_REGISTRY_URL_CONFIG, "http://localhost:8081");
+        properties.put(ConsumerConfig.VALUE_DESERIALIZER_CLASS_CONFIG, ProtobufDeserializer.class);
+//        properties.put(KafkaProtobufDeserializerConfig.SCHEMA_REGISTRY_URL_CONFIG, "http://localhost:8081");
 
         KafkaConsumer<String, DynamicMessage> consumer = new KafkaConsumer<>(properties);
 
